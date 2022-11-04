@@ -1,0 +1,16 @@
+{{>layouts/header}}
+<!-- 데이터를 어디로 보낼지를 form 태그의 action 속성으로 기재. 어떻게 보낼지를 method 속성으로 기재. -->
+<form class="container" action="/articles/create" method="post">
+    <div class="mb-3">
+        <label class="form-label">제목</label>    <!-- DTO 변수 -->
+        <input type="text" class="form-control" name="title">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">내용</label>    <!-- DTO 변수 -->
+        <textarea class="form-control" row="3" name="content"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/articles">Back</a>
+</form>
+
+{{>layouts/footer}}

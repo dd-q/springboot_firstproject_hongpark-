@@ -1,0 +1,61 @@
+<div class="card m-2" id="comments-new">
+    <div class="card-body">
+        <form>
+            <!-- 댓글 닉네임 작성 -->
+            <div class="mb-3">
+                <label class="form-label">닉네임</label>
+                <input class="form-control form-control-sm" id="new-comment-nickname">
+            </div>
+            <!-- 댓글 본문 작성 -->
+            <div class="mb-3">
+                <label class="form-label">댓글 내용</label>
+                <textarea class="form-control form-control-sm" rows="3" id="new-comment-body"></textarea>
+            </div>
+            <!-- 필요한 데이터 히든 인풋 -->
+            {{#article}}
+                <input type="hidden" id="new-comment-article-id" value="{{id}}">
+            {{/article}}
+            <!-- 전송 버튼 -->
+            <button type="button" class="btn btn-outline-primary btn-sm" id="comment-create-btn">댓글 작성</button>
+        </form>
+    </div>
+</div>
+
+<script>
+{
+    // 댓글 생성 버튼 변수화 (id가 commet-create-btn인 대상을) >> .querySelector("") 라는 메소드를 기억.
+    const commentCreateBtn = document.querySelector("#comment-create-btn");
+
+    // 버튼 클릭 이벤트를 감지          "클릭이 감지되면, 다음과 같은 함수를 수행하겠다."
+    commentCreateBtn.addEventListener("click", function() {
+        // 새 댓글 객체 생성
+        const comment ={
+            nickname : document.querySelector("#new-comment-nickname").value,
+            body : document.querySelector("#new-comment-body").value,
+            article_id : document.querySelector("#new-comment-article-id").value
+        };
+        console.log(comment);
+
+        // fetch() 메소드 : HTTP Request를 JavaScript 로 보내주도록!
+            // 1. url 작성
+        const url = "/api/articles/" + comment.article_id + "/comments";
+
+            // 2. fetch() 메서드의 파라미터 >> 2개 받음 ( url, 블럭{} )
+        fetch(url, {
+            method : "POST",                            // 대문자 주의 (PATCH)
+            body : JSON.stringify(comment),             // [JavaScript Object] 를 [JSON] 으로 변환하여 보내기 (JSON.stringify)
+            headers : {
+                "Content-Type" : "application/json"     // Body에 실어 보낸게 JSON 타입이라는 것을 명시 (header's' 주의)
+            }
+
+            // fetch() 메서드가 실행되고 reponse 가 돌아온다면, 다음과 같은 동작을 실행해라.
+        }).then(response => {
+
+            // http 응답 코드에 따른 메세지 출력
+            const msg = (response.ok) ? "댓글이 등록되었습니다." : "댓글 등록 실패";
+            alert(msg);
+            window.location.reload();
+        });
+    });
+}
+</script>
